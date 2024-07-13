@@ -1,0 +1,45 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const inquirer_1 = __importDefault(require("inquirer"));
+const currency = {
+    USD: 1,
+    EUR: 0.94,
+    GBP: 0.80,
+    INR: 83.49,
+    JPY: 154.59,
+    CNS: 7.24,
+    PKR: 278
+};
+let user_answer = await inquirer_1.default.prompt([
+    {
+        name: 'from',
+        message: 'Choose the currency you want to convert',
+        type: 'list',
+        choices: ['USD', 'EUR', 'GBP', 'INR', 'JPY', 'CNS', 'PKR'],
+    },
+    {
+        name: 'to',
+        message: 'Choose the currency you want into',
+        type: 'list',
+        choices: ['USD', 'EUR', 'GBP', 'INR', 'JPY', 'CNS', 'PKR'],
+    },
+    {
+        name: 'amount',
+        message: 'Enter your amount',
+        type: 'number',
+    }
+]);
+function roundToDecimal(number, decimalPlace) {
+    const factor = Math.pow(10, decimalPlace);
+    return Math.round(number * factor) / factor;
+}
+let fromAmount = currency[user_answer.from];
+let toAmount = currency[user_answer.to];
+let amount = user_answer.amount;
+let baseAmount = amount / fromAmount;
+let convertedAmount = baseAmount * toAmount;
+let roundedAmount = roundToDecimal(convertedAmount, 2);
+console.log(roundedAmount);
